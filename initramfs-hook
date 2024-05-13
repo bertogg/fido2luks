@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs() {
+        echo "$PREREQ"
+}
+
+case "$1" in
+        prereqs)
+                prereqs
+                exit 0
+        ;;
+esac
+
+. "${CONFDIR}/initramfs.conf"
+. /usr/share/initramfs-tools/hook-functions
+
+copy_exec /usr/bin/fido2-assert /bin
+copy_exec /usr/bin/fido2-token /bin
+copy_exec /usr/bin/jq /bin

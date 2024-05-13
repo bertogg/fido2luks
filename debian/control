@@ -1,0 +1,16 @@
+Source: fido2luks
+Section: admin
+Priority: optional
+Maintainer: Alberto Garcia <berto@igalia.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.0
+
+Package: fido2luks
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, initramfs-tools, fido2-tools, jq
+Description: Unlock a LUKS volume using a FIDO2 token on boot
+ This is an extension to initramfs-tools to unlock a LUKS-encrypted
+ disk at boot time using a FIDO2 token.
+ .
+ It is designed for scenarios where a FIDO2 token was enrolled into a
+ LUKS volume using systemd-cryptenroll --fido2-device.
