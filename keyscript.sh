@@ -48,7 +48,7 @@ else
 
         if [ -n "$SECRET" ]; then
             echo >&2
-            echo -n "$SECRET"
+            printf "%s" "$SECRET"
             exit 0
         else
             echo "*** Error obtaining secret from $FIDO2_DEV" >&2
