@@ -23,6 +23,7 @@ else
 
     if [ -n "$FIDO2_AUTHENTICATOR" ]; then
         echo "*** Found FIDO2 authenticator $FIDO2_AUTHENTICATOR" >&2
+        FIDO2_DEV=${FIDO2_AUTHENTICATOR%%:*}
 
         REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
         REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
@@ -38,7 +39,6 @@ else
 
         sleep 2
 
-        FIDO2_DEV=${FIDO2_AUTHENTICATOR%%:*}
         SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" \
                               -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
 
