@@ -27,8 +27,7 @@ else
         REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
         REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
 
-        # echo -n | openssl sha256 -binary | base64
-        jq -r '"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+        jq -r '"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
                ."fido2-rp",
                ."fido2-credential",
                ."fido2-salt"' "$LUKS_TOKEN" > "$ASSERT_PARAMS"
