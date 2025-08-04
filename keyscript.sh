@@ -15,7 +15,7 @@ if [ $? -ne 0 ]; then
     echo "*** No FIDO2 credentials found in $CRYPTTAB_SOURCE" >&2
 else
     echo "*** Waiting for a FIDO2 authenticator..." >&2
-    for f in $(seq 5); do
+    for _f in $(seq 5); do
         FIDO2_AUTHENTICATOR=$(fido2-token -L)
         [ -n "$FIDO2_AUTHENTICATOR" ] && break
         sleep 1
