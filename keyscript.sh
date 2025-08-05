@@ -32,7 +32,6 @@ else
         echo "*** Found FIDO2 authenticator $FIDO2_AUTHENTICATOR" >&2
         FIDO2_DEV=${FIDO2_AUTHENTICATOR%%:*}
 
-        VALID_CREDENTIAL="no"
         for i in $(seq "$NTOKENS"); do
             jq ".[$i-1]" "$LUKS_TOKEN_LIST" > "$LUKS_TOKEN"
             jq -r '"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
@@ -41,12 +40,12 @@ else
                    ."fido2-salt"' "$LUKS_TOKEN" > "$ASSERT_PARAMS"
             if fido2-assert -G -t up=false -t pin=false -i "$ASSERT_PARAMS" \
                             -o /dev/null "$FIDO2_DEV" 2> /dev/null; then
-                VALID_CREDENTIAL="yes"
                 break
             fi
+            rm -f "$LUKS_TOKEN" "$ASSERT_PARAMS"
         done
 
-        if [ "$VALID_CREDENTIAL" = "yes" ]; then
+        if [ -f "$LUKS_TOKEN" ] && [ -f "$ASSERT_PARAMS" ]; then
             REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
             REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
 
