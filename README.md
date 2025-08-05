@@ -7,8 +7,7 @@ volumes at boot time using a FIDO2 token (YubiKey, Nitrokey, ...).
 into a LUKS volume using `systemd-cryptenroll --fido2-device` but
 systemd itself is not used in the initramfs.
 
-This has successfully been tested with Debian bookworm and trixie (as
-of May 2024).
+This has successfully been tested with Debian bookworm and trixie.
 
 ## How to use it
 
@@ -20,10 +19,13 @@ of May 2024).
 - Dependencies: you need `initramfs-tools`, `fido2-tools` and `jq` on
   your system.
 
-- Install `fido2luks`: you can generate a Debian package using the
+- Install `fido2luks` using one of the Debian packages available in
+  the GitHub [releases page](https://github.com/bertogg/fido2luks/releases).
+  If you prefer, you can also generate your own package using the
   scripts that are included for convenience. Simply run `fakeroot
-  debian/rules binary` and install the resulting `.deb` file. If you
-  prefer not to do that you can run `make install` instead.
+  debian/rules binary` and install the resulting `.deb` file.
+  Alternatively, you can skip the Debian package and run
+  `make install` instead.
 
 - Make sure that the LUKS volume has been set up, e.g.:
   `systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=true --fido2-with-user-presence=true /dev/XXX`.
