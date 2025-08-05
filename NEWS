@@ -1,0 +1,9 @@
+0.0.2 (05 Aug 2025)
+===================
+- Added support for multiple tokens. fido2luks will now try all
+  credentials in the LUKS header until it finds one that works with
+  the inserted token.
+
+0.0.1 (13 May 2024)
+===================
+- Initial release.
