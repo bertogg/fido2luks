@@ -50,11 +50,6 @@ else
             REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
             REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
 
-            jq -r '"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-               ."fido2-rp",
-               ."fido2-credential",
-               ."fido2-salt"' "$LUKS_TOKEN" > "$ASSERT_PARAMS"
-
             if [ "$REQ_PIN" = "true" ]; then
                 stty -echo
             fi
