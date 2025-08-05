@@ -42,6 +42,9 @@ detect if your FIDO2 token is inserted and use it to unlock the LUKS
 volume. If the token is not detected then it will fall back to using a
 regular passphrase as usual.
 
+If you have multiple tokens you can enroll all of them, and
+`fido2luks` will detect which one to use at boot time.
+
 ## How this works
 
 If you are not interested in the technical details you can skip this
