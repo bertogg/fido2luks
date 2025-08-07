@@ -1,31 +1,29 @@
 # fido2luks
 
-This is an extension to initramfs-tools to unlock LUKS-encrypted
+This is an initramfs-tools extension to unlock LUKS-encrypted
 volumes at boot time using a FIDO2 token (YubiKey, Nitrokey, ...).
 
-`fido2luks` is designed for scenarios where a FIDO2 token was enrolled
-into a LUKS volume using `systemd-cryptenroll --fido2-device` but
-systemd itself is not used in the initramfs.
+`fido2luks` is designed for scenarios where a FIDO2 token has been
+enrolled into a LUKS volume using `systemd-cryptenroll --fido2-device`,
+but systemd itself is not used in the initramfs.
 
-This has successfully been tested with Debian bookworm and trixie.
+This has been successfully tested with Debian bookworm and trixie.
 
 ## How to use it
 
-- First of all, a word of warning: this can potentially render your
-  system unbootable, so make sure that you have a backup of your files
-  or a working initramfs that you can use as a fallback in case things
-  go wrong.
+- ⚠️ **Warning**: this can render your system unbootable, so make sure
+  that you have a backup of your files or a working initramfs that you
+  can use as a fallback in case things go wrong.
 
 - Dependencies: you need `initramfs-tools`, `fido2-tools` and `jq` on
   your system.
 
-- Install `fido2luks` using one of the Debian packages available in
+- Install `fido2luks` using one of the Debian packages available on
   the GitHub [releases page](https://github.com/bertogg/fido2luks/releases).
-  If you prefer, you can also generate your own package using the
-  scripts that are included for convenience. Simply run `fakeroot
-  debian/rules binary` and install the resulting `.deb` file.
-  Alternatively, you can skip the Debian package and run
-  `make install` instead.
+  If you prefer, you can also build your own package using the provided
+  scripts by running `fakeroot debian/rules binary` and installing the
+  resulting `.deb` file. Alternatively, you can skip the Debian
+  package and install `fido2luks` directly with `make install`.
 
 - Make sure that the LUKS volume has been set up, e.g.:
   `systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=true --fido2-with-user-presence=true /dev/XXX`.
@@ -37,10 +35,10 @@ This has successfully been tested with Debian bookworm and trixie.
 
 - Generate a new initramfs with `update-initramfs -u`.
 
-This should be all. Next time you boot the system `fido2luks` should
-detect if your FIDO2 token is inserted and use it to unlock the LUKS
-volume. If the token is not detected then it will fall back to using a
-regular passphrase as usual.
+That's it. Next time you boot the system `fido2luks` should detect if
+your FIDO2 token is inserted and use it to unlock the LUKS volume. If
+the token is not detected then it will fall back to using a regular
+passphrase as usual.
 
 If you have multiple tokens you can enroll all of them, and
 `fido2luks` will detect which one to use at boot time.
@@ -67,8 +65,8 @@ provide some data that is kept on the LUKS header:
 - Some settings such as whether to require a PIN or presence
   verification (usually physically touching the USB key).
 
-You can look at the scripts under the examples/ directory to see how
-to generate your own credentials and secrets. See also the
+Check out the scripts in the examples/ directory to see how to
+generate your own credentials and secrets. See also the
 `fido2-cred(1)` and `fido2-assert(1)` manpages for more details.
 
 ## Credits and license
