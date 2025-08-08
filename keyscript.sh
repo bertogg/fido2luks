@@ -66,13 +66,20 @@ try_fido2_unlock () {
     # hmac-secret, which is what unlocks the LUKS volume.
     REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
     REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
+    REQ_UV=$(jq -r '."fido2-uv-required"' "$LUKS_TOKEN")
 
     if [ "$REQ_PIN" = "true" ]; then
         stty -echo
     fi
 
-    SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" \
-                          -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
+    # Not all authenticators support 'uv' so pass it only when needed.
+    if [ "$REQ_UV" = "true" ]; then
+        SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" -t uv=true \
+                              -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
+    else
+        SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" \
+                              -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
+    fi
 
     if [ "$REQ_PIN" = "true" ]; then
         stty echo
