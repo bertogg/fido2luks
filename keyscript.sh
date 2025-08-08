@@ -10,18 +10,21 @@ LUKS_TOKEN=$(mktemp -t token.XXXXXX)
 trap cleanup INT EXIT
 
 try_fido2_unlock () {
+    # Get all tokens from the LUKS header with FIDO2 credentials.
     if ! cryptsetup luksDump --dump-json-metadata "$CRYPTTAB_SOURCE" | \
             jq -e '[.tokens[] | select(."fido2-credential" != null)]' > "$LUKS_TOKEN_LIST"; then
         echo "*** Error reading LUKS header in $CRYPTTAB_SOURCE" >&2
         return 1
     fi
 
+    # Count how many tokens we have.
     NTOKENS=$(jq length "$LUKS_TOKEN_LIST")
     if [ -z "$NTOKENS" ] || [ "$NTOKENS" = "0" ]; then
         echo "*** No FIDO2 credentials found in $CRYPTTAB_SOURCE" >&2
         return 1
     fi
 
+    # Check if the FIDO2 authenticator is inserted
     echo "*** Waiting for a FIDO2 authenticator..." >&2
     for _f in $(seq 5); do
         FIDO2_AUTHENTICATOR=$(fido2-token -L)
@@ -37,6 +40,10 @@ try_fido2_unlock () {
     echo "*** Found FIDO2 authenticator $FIDO2_AUTHENTICATOR" >&2
     FIDO2_DEV=${FIDO2_AUTHENTICATOR%%:*}
 
+    # Look for a credential that is valid for the inserted FIDO2
+    # authenticator. For that we try to get an assertion from the
+    # device, with 'up' and 'pin' set to false, so it requires no user
+    # interaction.
     for i in $(seq "$NTOKENS"); do
         jq ".[$i-1]" "$LUKS_TOKEN_LIST" > "$LUKS_TOKEN"
         jq -r '"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
@@ -55,6 +62,8 @@ try_fido2_unlock () {
         return 1
     fi
 
+    # Now that we have a valid credential use it to compute the
+    # hmac-secret, which is what unlocks the LUKS volume.
     REQ_PIN=$(jq -r '."fido2-clientPin-required"' "$LUKS_TOKEN")
     REQ_UP=$(jq -r '."fido2-up-required"' "$LUKS_TOKEN")
 
