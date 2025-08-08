@@ -10,8 +10,11 @@ LUKS_TOKEN=$(mktemp -t token.XXXXXX)
 trap cleanup INT EXIT
 
 try_fido2_unlock () {
-    cryptsetup luksDump --dump-json-metadata "$CRYPTTAB_SOURCE" | \
-        jq -e '[.tokens[] | select(."fido2-credential" != null)]' > "$LUKS_TOKEN_LIST"
+    if ! cryptsetup luksDump --dump-json-metadata "$CRYPTTAB_SOURCE" | \
+            jq -e '[.tokens[] | select(."fido2-credential" != null)]' > "$LUKS_TOKEN_LIST"; then
+        echo "*** Error reading LUKS header in $CRYPTTAB_SOURCE" >&2
+        return 1
+    fi
 
     NTOKENS=$(jq length "$LUKS_TOKEN_LIST")
     if [ -z "$NTOKENS" ] || [ "$NTOKENS" = "0" ]; then
