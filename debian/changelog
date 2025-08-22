@@ -1,3 +1,9 @@
+fido2luks (0.0.3-1) UNRELEASED; urgency=medium
+
+  * New release.
+
+ -- Alberto Garcia <berto@igalia.com>  Fri, 22 Aug 2025 12:04:14 +0200
+
 fido2luks (0.0.2-1) UNRELEASED; urgency=medium
 
   * New release.

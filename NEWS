@@ -1,3 +1,7 @@
+0.0.3 (22 Aug 2025)
+===================
+- Added support for FIDO2 user verification (UV).
+
 0.0.2 (05 Aug 2025)
 ===================
 - Added support for multiple tokens. fido2luks will now try all
