@@ -114,4 +114,4 @@ if try_fido2_unlock; then
 fi
 
 echo "*** Unlocking $CRYPTTAB_NAME using a regular passphrase" >&2
-/lib/cryptsetup/askpass "Enter passphrase: "
+/usr/lib/cryptsetup/askpass "Enter passphrase: "

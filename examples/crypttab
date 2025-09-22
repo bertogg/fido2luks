@@ -1,4 +1,4 @@
-# In order to use fido2luks add 'keyscript=/lib/fido2luks/keyscript.sh'
+# In order to use fido2luks add 'keyscript=/usr/lib/fido2luks/keyscript.sh'
 # and run update-initramfs -u
 
-<device>_crypt UUID=<LUKS-VOLUME-UUID> none luks,keyscript=/lib/fido2luks/keyscript.sh
+<device>_crypt UUID=<LUKS-VOLUME-UUID> none luks,keyscript=/usr/lib/fido2luks/keyscript.sh

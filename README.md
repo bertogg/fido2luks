@@ -30,7 +30,7 @@ This has been successfully tested with Debian bookworm and trixie.
   You should be able to see the `systemd-fido2` token data if you run
   `cryptsetup luksDump /dev/XXX`.
 
-- Edit `/etc/crypttab` and add `keyscript=/lib/fido2luks/keyscript.sh`
+- Edit `/etc/crypttab` and add `keyscript=/usr/lib/fido2luks/keyscript.sh`
   to the options of the volume that you want to unlock.
 
 - Generate a new initramfs with `update-initramfs -u`.
