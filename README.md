@@ -9,26 +9,32 @@ but systemd itself is not used in the initramfs.
 
 This has been successfully tested with Debian bookworm and trixie.
 
+## Installation
+
+Here's how to install `fido2luks` if it's not already available on
+your distro:
+
+- Dependencies: you need `initramfs-tools`, `fido2-tools` and `jq` on
+  your system.
+
+- Install `fido2luks` using one of these options:
+  - Download a `.deb` package from the GitHub
+    [releases](https://github.com/bertogg/fido2luks/releases) page.
+  - Build your own package using the provided scripts by running
+    `fakeroot debian/rules binary`.
+  - Simply run `make install` (this won't generate or install any
+    `.deb` package).
+
 ## How to use it
 
 - ⚠️ **Warning**: this can render your system unbootable, so make sure
   that you have a backup of your files or a working initramfs that you
   can use as a fallback in case things go wrong.
 
-- Dependencies: you need `initramfs-tools`, `fido2-tools` and `jq` on
-  your system.
-
-- Install `fido2luks` using one of the Debian packages available on
-  the GitHub [releases page](https://github.com/bertogg/fido2luks/releases).
-  If you prefer, you can also build your own package using the provided
-  scripts by running `fakeroot debian/rules binary` and installing the
-  resulting `.deb` file. Alternatively, you can skip the Debian
-  package and install `fido2luks` directly with `make install`.
-
-- Make sure that the LUKS volume has been set up, e.g.:
-  `systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=true --fido2-with-user-presence=true /dev/XXX`.
-  You should be able to see the `systemd-fido2` token data if you run
-  `cryptsetup luksDump /dev/XXX`.
+- Enroll your FIDO2 token into the LUKS volume, for example:
+  - `systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=true --fido2-with-user-presence=true /dev/XXX`
+  - After that, if you run `cryptsetup luksDump /dev/XXX` you should be
+    able to see the `systemd-fido2` token data.
 
 - Edit `/etc/crypttab` and add `keyscript=/usr/lib/fido2luks/keyscript.sh`
   to the options of the volume that you want to unlock.
