@@ -77,5 +77,9 @@ generate your own credentials and secrets. See also the
 
 ## Credits and license
 
-fido2luks was written by Alberto Garcia and is distributed under the
-GNU GPL.
+fido2luks was written by Alberto Garcia.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Copyright (C) 2024-2025 Alberto Garcia <berto@igalia.com>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 cleanup () {
     rm -f "$ASSERT_PARAMS" "$LUKS_TOKEN" "$LUKS_TOKEN_LIST"
 }
