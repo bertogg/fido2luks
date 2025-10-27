@@ -7,6 +7,7 @@ cleanup () {
     rm -f "$ASSERT_PARAMS" "$LUKS_TOKEN" "$LUKS_TOKEN_LIST"
 }
 
+MAX_RETRIES=3
 ASSERT_PARAMS=$(mktemp -t params.XXXXXX)
 LUKS_TOKEN_LIST=$(mktemp -t tokenlist.XXXXXX)
 LUKS_TOKEN=$(mktemp -t token.XXXXXX)
@@ -94,8 +95,11 @@ try_fido2_unlock () {
         stty -echo
     fi
 
-    SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" $UV_OPT \
-                          -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
+    for _f in $(seq $MAX_RETRIES); do
+        SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" $UV_OPT \
+                              -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
+        [ -n "$SECRET" ] && break
+    done
 
     if [ "$REQ_PIN" = "true" ]; then
         stty echo
