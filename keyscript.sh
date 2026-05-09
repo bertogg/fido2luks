@@ -95,10 +95,10 @@ try_fido2_unlock () {
         stty -echo
     fi
 
-    for _f in $(seq $MAX_RETRIES); do
+    for _f in $(seq "$MAX_RETRIES"); do
         SECRET=$(fido2-assert -G -h -t up="$REQ_UP" -t pin="$REQ_PIN" $UV_OPT \
                               -i "$ASSERT_PARAMS" "$FIDO2_DEV" | tail -n 1)
-        [ -n "$SECRET" -o "$REQ_PIN" != "true" ] && break
+        [ -n "$SECRET" ] || [ "$REQ_PIN" != "true" ] && break
     done
 
     if [ "$REQ_PIN" = "true" ]; then
